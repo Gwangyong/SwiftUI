@@ -9,9 +9,9 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
-    var body: some View {
-      Map(initialPosition: .region(region))
-    }
+  var body: some View {
+    Map(initialPosition: .region(region))
+  }
   
   private var region: MKCoordinateRegion {
     MKCoordinateRegion(
@@ -22,5 +22,5 @@ struct MapView: View {
 }
 
 #Preview {
-    MapView()
+  MapView()
 }
