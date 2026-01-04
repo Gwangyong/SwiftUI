@@ -23,6 +23,19 @@ struct LandmarkRow: View {
   }
 }
 
-#Preview {
+// MARK: - Preview를 여러개 생성 및 미리보기 이름 지정
+#Preview("Turtle Rock") { // Preview 이름 지정
   LandmarkRow(landmark: landmarks[0])
+}
+
+#Preview("Salmon") {
+  LandmarkRow(landmark: landmarks[1])
+}
+
+// MARK: - 하나의 Preview 안에서 여러 뷰를 Group으로 묶어서 표시
+#Preview("Merge") {
+  Group {
+    LandmarkRow(landmark: landmarks[0])
+    LandmarkRow(landmark: landmarks[1])
+  }
 }
