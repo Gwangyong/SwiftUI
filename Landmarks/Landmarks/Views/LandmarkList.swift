@@ -14,7 +14,7 @@ struct LandmarkList: View {
       List(landmarks) { landmark in
         NavigationLink { // 어떤 View를 누르면, 다른 View로 이동시키는 컴포넌트
           // 자동으로 chevron(>) 추가
-          LandmarkDetail() // destination (눌렀을 때 나타날 화면)
+          LandmarkDetail(landmark: landmark) // destination (눌렀을 때 나타날 화면)
         } label: { // 사용자가 실제로 누르는 UI (터치 영역)
           LandmarkRow(landmark: landmark)
         }
