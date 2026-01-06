@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LandmarkList: View {
   // 즐겨찾기 목록만 보여줄지 여부를 결정하는 상태 값
-  @State private var showFavoritesOnly = true
+  @State private var showFavoritesOnly = false
   
   var filteredLandmarks: [Landmark] {
     landmarks.filter { landmark in
@@ -18,16 +18,27 @@ struct LandmarkList: View {
   }
   
   var body: some View {
+    // iPad 기준, 왼쪽 영역 (목록/사이드바)
     NavigationSplitView {
-      // iPad 기준, 왼쪽 영역 (리스트)
-      List(filteredLandmarks) { landmark in
-        NavigationLink { // 어떤 View를 누르면, 다른 View로 이동시키는 컴포넌트
-          // 자동으로 chevron(>) 추가
-          LandmarkDetail(landmark: landmark) // destination (눌렀을 때 나타날 화면)
-        } label: { // 사용자가 실제로 누르는 UI (터치 영역)
-          LandmarkRow(landmark: landmark)
+      List {
+        // @Binding: 상태 값을 읽고/변경하기 위한 연결
+        // $: @State를 Binding 타입으로 꺼내기 위한 문법
+        Toggle(isOn: $showFavoritesOnly) {
+          Text("Favorites only")
+        }
+        
+        // ForEach: 동적으로 landmark 개수만큼 row 생성
+        ForEach(filteredLandmarks) { landmark in
+          NavigationLink { // 어떤 View를 누르면, 다른 View로 이동시키는 컴포넌트
+            // 자동으로 chevron(>) 추가
+            LandmarkDetail(landmark: landmark) // destination (눌렀을 때 나타날 화면)
+          } label: { // 사용자가 실제로 누르는 UI (터치 영역)
+            LandmarkRow(landmark: landmark)
+          }
         }
       }
+      // value의 값이 변경될 때마다 애니메이션
+      .animation(.default, value: filteredLandmarks)
       .navigationTitle("Landmarks") // 목록의 Title
     } detail: {
       // iPad 기준, 오른쪽 영역 (상세화면)
