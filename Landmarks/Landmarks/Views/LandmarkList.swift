@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct LandmarkList: View {
+  // ModelData 타입을 key로 환경에 저장된 인스턴스를 가져와서, modelData라는 이름으로 사용
+  @Environment(ModelData.self) var modelData
   // 즐겨찾기 목록만 보여줄지 여부를 결정하는 상태 값
   @State private var showFavoritesOnly = false
   
   var filteredLandmarks: [Landmark] {
-    landmarks.filter { landmark in
+    modelData.landmarks.filter { landmark in
       (!showFavoritesOnly || landmark.isFavorite)
     }
   }
@@ -49,6 +51,7 @@ struct LandmarkList: View {
 
 #Preview {
   LandmarkList()
+    .environment(ModelData())
 }
 
 // MARK: - Learned
