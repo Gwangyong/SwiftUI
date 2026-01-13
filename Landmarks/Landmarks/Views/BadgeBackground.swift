@@ -51,11 +51,38 @@ struct BadgeBackground: View {
           )
         }
       }
-      .fill(.black)
+      .fill(
+        .linearGradient(
+          Gradient(colors: [Self.gradientStart, Self.gradientEnd]),
+          startPoint: UnitPoint(x: 0.5, y: 0.0),
+          endPoint: UnitPoint(x: 0.5, y: 0.6)
+        ))
     }
+    // 1:1 가로세로 비율을 유지
+    // 배지의 상위 뷰가 정사각형이 아니더라도, 뷰의 중앙에 위치하도록함
+    .aspectRatio(1.0, contentMode: .fit)
   }
+  static let gradientStart = Color(red: 239.0 / 255, green: 120.0 / 255, blue: 221.0 / 255)
+  static let gradientEnd = Color(red: 239.0 / 255, green: 172.0 / 255, blue: 120.0 / 255)
 }
 
 #Preview {
   BadgeBackground()
 }
+
+// MARK: - Learned
+
+// MARK: 종횡비(aspect ratio)
+// .aspectRatio(_ aspectRatio: CGFloat?, contentMode: ContentMode)
+//
+// 첫 번째 매개변수: aspectRatio
+// -> "가로:세로 비율을 얼마로 할지"
+// 1.0은 가로:세로 = 1:1비율로, 무조건 정사각형
+// 3/4는 가로:세로 = 3:4비율로, 세로가 더 긴 뷰
+// nil일때는 "원래 이 뷰가 갖고 있던 비율을 유지"
+//
+// 두 번째 매개변수: contentMode
+// .fit / .fill 이렇게 2가지로 나뉨.
+// 주어진 공간 안에서 어떻게 배치할 것인가.
+// .fit: 비율을 유지한 채, 전부 보이도록 축소/확대 (잘리지 않지만, 여백이 생길 수 있음)
+// .fill: 비율을 유지한 채, 공간을 꽉 채움 (잘릴 수 있지만, 여백은 남지 않음)
