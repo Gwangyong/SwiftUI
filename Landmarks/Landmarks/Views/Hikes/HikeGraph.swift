@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+extension Animation {
+  static func ripple(index: Int) -> Animation {
+    // dampingFraction: 스프링 탄성 감쇠 비율. 얼마나 튕기고 빨리 멈출지 정하는 값
+    Animation.spring(dampingFraction: 0.5)
+      .speed(2) // 2배 빠르게
+      .delay(0.03 * Double(index)) // index마다 0.03초씩 지연
+  }
+}
+
 struct HikeGraph: View {
   var hike: Hike
   var path: KeyPath<Hike.Observation, Range<Double>>
@@ -40,6 +49,7 @@ struct HikeGraph: View {
             range: observation[keyPath: path],
             overallRange: overallRange
           )
+          .animation(.ripple(index: index))
         }
         .offset(x: 0, y: proxy.size.height * heightRatio)
       }
