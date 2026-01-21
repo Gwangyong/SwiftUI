@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+extension AnyTransition {
+  static var moveAndFade: AnyTransition {
+    .asymmetric( // 서로 다른 애니메이션을 따로 정의
+      // A.combined(with: B): A전환 + B전환을 동시에 적용
+      insertion: .move(edge: .trailing).combined(with: .opacity),
+      removal: .scale.combined(with: .opacity)
+    )
+  }
+}
+
 struct HikeView: View {
   var hike: Hike
   @State private var showDetail = false
@@ -41,6 +51,7 @@ struct HikeView: View {
       
       if showDetail {
         HikeDetail(hike: hike)
+          .transition(.moveAndFade)
       }
     }
   }
