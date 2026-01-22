@@ -11,6 +11,22 @@ import Foundation
 class ModelData {
   var landmarks: [Landmark] = load("landmarkData.json")
   var hikes: [Hike] = load("hikeData.json")
+  
+  var categories: [String: [Landmark]] { // ex. "Lakes": [Landmark, Landmark, ...]
+    Dictionary(
+      grouping: landmarks, // ladnmarks 배열을 하나씩 순회
+      by: { $0.category.rawValue } // 각 Landmark의 category.rawValue를 Key로 사용해 그룹핑
+    )
+    /*
+     
+     categories = [
+       "Lakes":     [Landmark, Landmark, ...],
+       "Rivers":    [Landmark, Landmark, ...],
+       "Mountains": [Landmark, Landmark, ...]
+     ]
+     
+     */
+  }
 }
 
 func load<T: Decodable>(_ filename: String) -> T {
