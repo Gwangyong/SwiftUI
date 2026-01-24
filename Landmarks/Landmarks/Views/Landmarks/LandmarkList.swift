@@ -24,7 +24,7 @@ struct LandmarkList: View {
     NavigationSplitView {
       List {
         // @Binding: 상태 값을 읽고/변경하기 위한 연결
-        // $: @State를 Binding 타입으로 꺼내기 위한 문법
+        // $: @State 값을 Binding으로 전달
         Toggle(isOn: $showFavoritesOnly) {
           Text("Favorites only")
         }
@@ -82,3 +82,8 @@ struct LandmarkList: View {
 // 또한, Apple 가이드라인에 따라서 private 선언이 권장됨
 //
 // 즉, @State는 SwiftUI View 안에서만 사용하는 UI 업데이트를 트리거하는 로컬 상태 저장소
+
+// MARK: $
+// @State의 $ -> UI용 양방향 연결선 (Binding)
+// @Published의 $ -> 변화 알림 스트림 (Publisher)
+// @Binding은 이미 외부 상태와 연결된 값, Binding 타입이 필요한 곳에서만 $를 사용

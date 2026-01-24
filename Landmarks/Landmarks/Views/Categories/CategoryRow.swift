@@ -21,7 +21,11 @@ struct CategoryRow: View {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(alignment: .top, spacing: 0) {
           ForEach(items) { landmark in
-            CategoryItem(landmark: landmark)
+            NavigationLink {
+              LandmarkDetail(landmark: landmark) // 이동할 화면
+            } label: {
+              CategoryItem(landmark: landmark) // label (화면에 보여질 UI, 탭 영역)
+            }
           }
         }
       }

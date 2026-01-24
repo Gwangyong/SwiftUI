@@ -8,8 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
+  @State private var selection: Tab = .featured
+  
+  enum Tab {
+    case featured
+    case list
+  }
+  
   var body: some View {
-    LandmarkList()
+    TabView(selection: $selection) { // 사용자가 tab하면 $selection의 값이 변동
+      // 탭 순서: 왼쪽부터 나오는 순서는 코드에 나오는 순서대로
+      CategoryHome()
+        .tabItem {
+          Label("Featured", systemImage: "star")
+        }
+        .tag(Tab.featured)
+      // .tag: 이 뷰가 어떤 선택값에 대응되는지 붙여주는 식별자 (selection에 실제 저장되는 값과 타입이 일치해야함)
+      
+      LandmarkList()
+        .tabItem {
+          Label("List", systemImage: "list.bullet")
+        }
+        .tag(Tab.list)
+    }
+    
   }
 }
 
