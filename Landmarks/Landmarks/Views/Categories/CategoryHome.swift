@@ -13,9 +13,20 @@ struct CategoryHome: View {
   var body: some View {
     NavigationSplitView {
       List { // UIKit의 TableView역할
+        ModelData().features[0].image
+          .resizable()
+          .scaledToFill()
+          .frame(height: 200)
+          .clipped() // frame영역 밖으로 나간 부분을 자름
+        // UIKit의 clipsToBounds와 동일 역할. (다만, UIKit은 bounds기준, SwiftUI는 frame기준)
         // ForEach: numberOfRowsInSection + cellForRowAt역할
+          .listRowInsets(EdgeInsets())
+        // 해당 List row의 기본 여백을 0으로 만들어서 컨텐츠가 좌우로 꽉 차게 하는 역할
+        // EdgeInsets()는 기본 값이 전부 0이라서, Edge 패딩을 0으로 만듦
+        
+        
         ForEach(modelData.categories.keys.sorted(), id: \.self) { key in
-          Text(key)
+          CategoryRow(categoryName: key, items: modelData.categories[key]!)
         }
       }
       .navigationTitle("Featured")

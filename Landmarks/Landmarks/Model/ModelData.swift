@@ -12,6 +12,10 @@ class ModelData {
   var landmarks: [Landmark] = load("landmarkData.json")
   var hikes: [Hike] = load("hikeData.json")
   
+  var features: [Landmark] {
+    landmarks.filter { $0.isFeatured }
+  }
+  
   var categories: [String: [Landmark]] { // ex. "Lakes": [Landmark, Landmark, ...]
     Dictionary(
       grouping: landmarks, // ladnmarks 배열을 하나씩 순회
