@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CategoryHome: View {
   @Environment(ModelData.self) var modelData
+  @State private var showingProfile = false // 사용자 프로필
   
   var body: some View {
     NavigationSplitView {
@@ -28,8 +29,23 @@ struct CategoryHome: View {
         ForEach(modelData.categories.keys.sorted(), id: \.self) { key in
           CategoryRow(categoryName: key, items: modelData.categories[key]!)
         }
+        .listRowInsets(EdgeInsets())
       }
+      // listStyle: List 기본 외형과 동작 정함
+      .listStyle(.insetGrouped)
       .navigationTitle("Featured")
+      .toolbar {
+        Button {
+          showingProfile.toggle() // 버튼 누를시 값 toggle
+        } label: { // Text는 글자만 있음. Label은 텍스트 + 아이콘, 시스템이 자동 레이아웃 결정
+          Label("User Profile", systemImage: "person.crop.circle")
+        }
+      }
+      // showingProfile 관찰. true되면 시트를 띄움. false면 내림
+      .sheet(isPresented: $showingProfile) {
+        ProfileHost()
+          .environment(modelData) // 동일한 인스턴스 주입
+      }
     } detail: {
       Text("select a Landmark")
       // 여기도 .navigationTitle 가능. 다만, iPad에서만 보임
