@@ -22,7 +22,7 @@ struct ProfileHost: View {
       if editMode?.wrappedValue == .inactive { // editMode가 아닐때 (편집 종료상태)
         ProfileSummary(profile: modelData.profile)
       } else { // 편집 모드 상태일 경우
-        Text("Profile Editor")
+        ProfileEditor(profile: $draftProfile)
       }
     }
     .padding()
