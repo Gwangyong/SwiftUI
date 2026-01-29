@@ -11,6 +11,7 @@ import Foundation
 class ModelData {
   var landmarks: [Landmark] = load("landmarkData.json")
   var hikes: [Hike] = load("hikeData.json")
+  var profile = Profile.default // 창을 닫아도 업데이트된 정보가 유지되도록 하기위해
   
   var features: [Landmark] {
     landmarks.filter { $0.isFeatured }

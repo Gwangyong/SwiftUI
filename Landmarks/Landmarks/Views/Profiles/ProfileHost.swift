@@ -9,11 +9,21 @@ import SwiftUI
 
 struct ProfileHost: View {
   @Environment(\.editMode) var editMode
+  @Environment(ModelData.self) var modelData
   @State private var draftProfile = Profile.default
   
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
-      ProfileSummary(profile: draftProfile)
+      HStack {
+        Spacer() // editButton이 우측상단에 붙게 하기위해
+        EditButton()
+      }
+      
+      if editMode?.wrappedValue == .inactive { // editMode가 아닐때 (편집 종료상태)
+        ProfileSummary(profile: modelData.profile)
+      } else { // 편집 모드 상태일 경우
+        Text("Profile Editor")
+      }
     }
     .padding()
   }
