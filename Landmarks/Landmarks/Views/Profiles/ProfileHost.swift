@@ -10,11 +10,18 @@ import SwiftUI
 struct ProfileHost: View {
   @Environment(\.editMode) var editMode
   @Environment(ModelData.self) var modelData
+  // 편집 중일때는 저장되지 않아야하니, 편집 중에는 임시 복사본을 사용
   @State private var draftProfile = Profile.default
   
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
       HStack {
+        if editMode?.wrappedValue == .active {
+          Button("Cancel", role: .cancel) {
+            draftProfile = modelData.profile // 원래 값으로 다시 덮어씌움 (원상복구)
+            editMode?.animation().wrappedValue = .inactive
+          }
+        }
         Spacer() // editButton이 우측상단에 붙게 하기위해
         EditButton()
       }
@@ -23,6 +30,12 @@ struct ProfileHost: View {
         ProfileSummary(profile: modelData.profile)
       } else { // 편집 모드 상태일 경우
         ProfileEditor(profile: $draftProfile)
+          .onAppear { // ProfileEditor View가 나타날 때 실행
+            draftProfile = modelData.profile // profile값을 임시 편집용으로 복사
+          }
+          .onDisappear { // ProfileEditor View에서 사라질 때 실행
+            modelData.profile = draftProfile // 편집한 값을 modelData에 반영
+          }
       }
     }
     .padding()
