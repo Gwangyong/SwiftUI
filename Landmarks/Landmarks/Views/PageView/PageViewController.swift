@@ -12,6 +12,7 @@ import UIKit
 // SwiftUI와 UIKit 사이클을 연결하는 브리지 프로토콜
 struct PageViewController<Page: View>: UIViewControllerRepresentable {
   var pages: [Page]
+  @Binding var currentPage: Int // 지금 몇 번째 페이지를 보여줄지 index
   
   func makeCoordinator() -> Coordinator {
     Coordinator(self)
@@ -30,7 +31,7 @@ struct PageViewController<Page: View>: UIViewControllerRepresentable {
   
   func updateUIViewController(_ pageViewController: UIPageViewController, context: Context) {
     pageViewController.setViewControllers(
-      [context.coordinator.controllers[0]], direction: .forward, animated: true)
+      [context.coordinator.controllers[currentPage]], direction: .forward, animated: true)
   }
   
   // MARK: - Coordinator
