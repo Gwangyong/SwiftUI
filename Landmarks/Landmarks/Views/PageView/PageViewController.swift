@@ -25,6 +25,7 @@ struct PageViewController<Page: View>: UIViewControllerRepresentable {
       navigationOrientation: .horizontal)
     // 다음/이전 페이지 계산은 coordinator한테 맡김(dataSource)
     pageViewController.dataSource = context.coordinator
+    pageViewController.delegate = context.coordinator
     
     return pageViewController
   }
@@ -35,7 +36,7 @@ struct PageViewController<Page: View>: UIViewControllerRepresentable {
   }
   
   // MARK: - Coordinator
-  class Coordinator: NSObject, UIPageViewControllerDataSource {
+  class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     var parent: PageViewController // parent.pages처럼 접근하기 위해
     var controllers = [UIViewController]()
     
@@ -45,7 +46,7 @@ struct PageViewController<Page: View>: UIViewControllerRepresentable {
       controllers = parent.pages.map { UIHostingController(rootView: $0) }
     }
     
-    // MARK: - 현재 페이지 기준으로 이전/다음에 보여줄 UIViewController를 반환하는 메서드들
+    // MARK: - 현재 페이지 기준으로 이전/다음에 보여줄 UIViewController를 반환하는 메서드들 (DataSource)
     
     // MARK: viewControllerBefore: 왼쪽(이전) 페이지
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -67,6 +68,21 @@ struct PageViewController<Page: View>: UIViewControllerRepresentable {
         return controllers.first // 첫 페이지로 순환 이동
       }
       return controllers[index + 1] // 다음 페이지 index 번호 반환
+    }
+    
+    // MARK: - Delegate
+    // didFinishAnimating: 페이지 전환 애니메이션이 끝났을 떄 호출
+    func pageViewController(
+      _ pageViewController: UIPageViewController,
+      didFinishAnimating finished: Bool,
+      previousViewControllers: [UIViewController],
+      transitionCompleted completed: Bool
+    ) {
+      if completed,
+         let visibleViewController = pageViewController.viewControllers?.first, // 현재 보이는 VC 가져오기
+         let index = controllers.firstIndex(of: visibleViewController) { // 그 VC가 controllers 배열에서 몇 번째인지 찾기
+        parent.currentPage = index // 현재 페이지를 부모에게 상태 전달
+      }
     }
   }
 }
